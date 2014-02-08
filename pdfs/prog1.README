@@ -1,0 +1,43 @@
+  This is file prog1.README in the directory 
+
+          ~csi402/public/prog1
+
+You should also take a careful look at the following 
+additional files in the above directory. 
+
+  (1) submission_info.txt: This file explains how you should use
+      the turnin-csi402 program to submit your source files
+      and makefile. It also contains additional specifications
+      for your makefile.
+
+  (2) test_1.txt, test_2.txt, test_3.txt: These are three
+      sample input files to test your program. 
+
+  (3) output_1.txt, output_2.txt, output_3.txt: These are 
+      the respective expected outputs for the three sample 
+      inputs mentioned above.  (See additional information 
+      below.)
+
+Information about the sample inputs and outputs: 
+------------------------------------------------
+
+  Some additional explanation regarding the sample input file 
+test_1.txt and the corresponding output file output_1.txt
+is given below. (A similar explanation applies to the other
+two sample inputs.) 
+
+   As indicated in the handout, each line of the input file
+test_1.txt contains a string.  When we run the executable 
+version of your program (p1) on the file test_1.txt  using 
+the Unix command
+
+          p1  test_1.txt  out1.txt
+
+the answers produced by your program in the file out1.txt 
+must agree with those given in the file output_1.txt in this
+directory.  
+
+Note: You should NOT hardcode the above file names into your
+      program. Instead, you should rely on command line arguments 
+      to get the names of input and output files. 
+
