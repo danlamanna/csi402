@@ -176,7 +176,7 @@ int  count (char *infile, char *my_topic, int q) {
   /* Read each record, check if the record is important, and if so, */
   /* increment the counter.                                         */
 
-  while (fread((void *)&temp, sizeof(struct book_record), 1, infp) != 1) {
+  while (fread((void *)&temp, sizeof(struct book_record), 1, infp) == 1) {
     if ((strcmp(temp.topic, my_topic) == 0) && (temp.qty_in_stock < q))
        imp_counter++;
   }
