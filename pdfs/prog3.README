@@ -1,0 +1,24 @@
+  This is file prog3.README in the directory 
+
+          ~csi402/public/prog3
+
+You should also take a careful look at the following 
+additional files in the above directory. 
+
+  (1) submission_info.txt: This file explains how you should use
+      the turnin-csi402 program to submit your source files
+      and makefile. It also contains additional specifications
+      for your makefile.
+
+  (2) sample_test_info.txt: This file provides information
+      about a sample test case for this program. (The files needed
+      for the test case are config_file.txt, Students.sch,
+      Students.dat, Courses.sch, Courses.dat, query_file.txt and
+      output.txt. All of these files are in the directory
+      specified above.)
+
+
+Note: You should NOT hardcode any of the above file names into your
+      program. Instead, you should rely on the information
+      provided in the configuration file and the command line 
+      get the names of files. 
