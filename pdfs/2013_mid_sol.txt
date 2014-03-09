@@ -1,0 +1,195 @@
+
+          CSI 402 -- Spring 2013 -- Solutions to Midterm Examination
+          ----------------------------------------------------------
+
+Question I:
+-----------
+
+(a) An instruction specifies a register that contains a memory
+    address. (Each register in Sun SPARC is 64 bits long and thus
+    can hold a memory address.)
+
+(b) A relocatable program is one that executes correctly regardless  
+    of its starting address.
+
+(c) Multiply-defined symbols will be detected in Pass 1.
+    The reason is that before a symbol is inserted into the
+    Symbol Table, the assembler checks whether the symbol is
+    already in the Symbol Table.
+
+(d) The problem is that main.c won't be recompiled when the file
+    struct_def.h is changed. 
+
+
+============================================================================
+
+Question II:
+------------
+
+Part (a):  The 6-bit opcode for LDA is 000000.
+
+  Since the instruction uses an immediate operand (namely, -16)
+the i-bit is 1 and the other five special bits (n, x, b, p and e) 
+are all 0.
+
+  The immediate operand will be stored in the last 12 bits.
+Since the value to be stored is negative, we must express 
+it in 2's complement form. Now,
+
+   +16 (decimal) =  10 (hex) = 0000 0001 0000  (in 12-bit binary).
+
+So, -16 (decimal) in 2's complement form = 1111 1111 0000 (binary).
+
+  Hence the assembled instruction is
+
+           000000 010000 1111 1111 0000   (binary)
+
+which is 010FF0  (hex).
+
+Part (b): The instruction in binary = 1111 0000 0010 0000 0000 1001.
+
+  The first six bits correspond to the opcode.
+From the next six bits, we note that the p-bit = 1 and
+the other special bits (n, i, x, b, e) are all 0. So, 
+the 3-byte instruction uses PC-relative mode of addressing. 
+
+  The displacement specified = 0000 0000 1001 (binary) = 9 decimal. 
+
+  Since the LC-value of the instruction is 300, the value of PC
+when the instruction is executed is 303. The PC-relative
+displacement specified in the instruction is 9. Thus,
+
+      Address of NEXT = 303 + 9 = 312 (decimal).
+
+Part (c): One binary search tree with height 4 for the given
+symbols is the following:
+
+
+                 AIM
+                   \ 
+                    \
+                    BAT
+                      \
+                       \
+                       CARE
+                         \
+                          \
+                         EVAL
+                          / \
+                         /   \
+                       DATA  FINAL
+
+Part (d): The resulting list at the end of the access sequence is:
+
+            E  F  D  C  A  B
+
+==========================================================================
+
+Question III:
+-------------
+
+Part (a): The output produced is shown below.
+
+     -31    x
+     -11    x
+
+Part (b):
+
+ Symbol Table:
+
+      Symbol      LC-Value
+      ------      --------
+       MAIN           0
+       BUF           21
+       P1           921
+       P2           924
+
+==========================================================================
+
+Question IV:
+------------
+
+Idea: We use a bit mask to check whether e and n bits are
+      both 1. We use another bit mask to get the value stored
+      in the least significant 20 bits of the instruction.
+
+// Mask to check the e and n bits.
+
+#define  EN_MASK   0x02100000
+
+// Mask to clear the most significant 12 bits while keeping
+// the least significant 20 bits intact.  
+
+#define  ADDR_MASK   0x000FFFFF
+
+// Minimum value specified in the problem.
+
+#define  MIN_VAL   300
+
+int  check_special (int instr) {
+
+  if (((instr & EN_MASK) == EN_MASK) && 
+      ((instr & ADDR_MASK) >= MIN_VAL))
+     return 1;
+  else
+     return 0;
+
+} // End of check_special.
+
+
+Question V:
+------------
+
+Note: Students were not required to do the error checks carried
+      out in the following solution. 
+
+#include  <stdio.h>
+#include  <stdlib.h>
+#include  <string.h>
+
+#define   TITLE_MAX   100
+#define   AUTHOR_MAX   30
+#define   TOPIC_MAX    15
+
+struct   book_record {
+  char   title[TITLE_MAX];  char  author[AUTHOR_MAX];  
+  char   topic[TOPIC_MAX];  int   qty_in_stock;
+  float  price;
+};
+
+
+int  count (char *infile, char *my_topic, int q) {
+
+  int imp_counter = 0;   // Counter for important records.
+
+  FILE *infp;  /* Pointer for input file. */
+
+  struct book_record  temp;  /* To used to read from input file. */
+
+  /* Open the input file. */
+
+  if ((infp = fopen(infile, "r")) == NULL) {
+     fprintf(stderr, "Could not open input file.\n");
+     exit(1);
+  }
+
+  /* Read each record, check if the record is important, and if so, */
+  /* increment the counter.                                         */
+
+  while (fread((void *)&temp, sizeof(struct book_record), 1, infp) == 1) {
+    if ((strcmp(temp.topic, my_topic) == 0) && (temp.qty_in_stock < q))
+       imp_counter++;
+  }
+
+  /* Close the input file. */
+
+  if (fclose(infp) == EOF) {
+     fprintf(stderr, "Could not close input file.\n");
+     exit(1);
+  }
+
+  return  imp_counter;
+
+} /* End of count. */
+
+===============================================================================
