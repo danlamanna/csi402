@@ -115,7 +115,7 @@ struct  tree_node {
    struct tree_node *left_child, *right_child;
 };
 
-int  count (struct tree_node *rp, int maxlen) {
+void  count (struct tree_node *rp, int maxlen) {
 
   if (rp == NULL)  /* The tree is empty; so. */
      return 0;
