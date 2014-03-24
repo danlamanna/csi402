@@ -1,0 +1,207 @@
+
+          CSI 402 -- Spring 2014 -- Solutions to Midterm Examination
+          ----------------------------------------------------------
+                 (Version I -- White Exam Sheet)
+                 -------------------------------
+
+Question I:
+-----------
+
+(a) Yes, MIPS is an example of a load-store architecture. The reason
+    is that only load and store instructions require operand fetch
+    (from memory).
+
+(b) Allowing overlapping register windows facilitates parameter 
+    passing.
+
+(c) The binary search tree that results after inserting all the six
+    symbols in the specified order is as follows.
+
+                      GOOD
+                      /  \
+                     /    \
+                 BUFFER   LIKE
+                  / \       \
+                 /   \       \
+               BAD  CROWD    VALUE
+
+     The height of the tree = 2.
+
+(d) The instruction in binary = 0011 0010 0000 0000 0010 0001.
+
+  The first six bits correspond to the opcode for the STA instruction.
+
+  From the next six bits, we note that the n-bit = 1 and
+  the other special bits (i, x, b, p, e) are all 0. So, 
+  the 3-byte instruction uses indirect addressing. 
+
+  The displacement specified = 0000 0010 0001 (binary) = 33 (decimal). 
+
+  Since the instruction specifies indirect addressing, the
+  effective address is given by the contents of location 33;
+  thus, the effective address = 2700 (decimal).
+
+  Thus, the contents of register A (i.e., the value -17) will be 
+  stored in location 2700. (The other memory locations mentioned in
+  the problem remain unchanged.)
+
+  Hence, the final contents of the specified addresses are as follows:
+
+     Address 21: 2400   Address 33: 2700   Address 2700: -17
+  
+
+(e) The 6-bit opcode for JEQ is 110000.
+
+   The instruction uses PC-relative mode. So, the p-bit is 1 and
+the other special bits (n, i, x, b and e) are all 0.
+
+   To compute the displacement, note that the value of PC when the
+instruction is executed = 250 + 3 = 253 (decimal). The LC-value
+for the symbol LOOP is 234. So, displacement = 234 - 253 = -19 (decimal).
+
+             Now, +19 = 13 hex = 0000 0001 0011  (12 bit binary).
+So, -19 in 2's complement form = 1111 1110 1101  (12 bit binary)
+
+So, the instruction in binary is:
+
+           110000 000010 1111 1110 1101
+
+which is C02FED in hex.
+
+(f): The symbol table is given below.
+
+           Symbol        LC-Value
+           ------        --------
+            Q1              0
+            FIRST           0
+            LOOP           10 
+            BLOCK          23
+            BUF            26
+            VAL            29
+
+============================================================================
+
+Question II:
+------------
+
+Part (a): The output produced is shown below.
+
+        6   g
+        3   d
+        0   a
+
+Part (b): The output produced is shown below.
+
+       -7  5  2
+       -7  6  2
+       -7  6  1
+       -7  4  1
+
+==========================================================================
+
+Question III:
+------------
+
+Idea: We use recursion. 
+
+
+#include <stdio.h>    /* To use NULL. */
+#include <string.h>   /* To use the strlen function */
+
+#define  SIZE  15
+
+struct  tree_node {
+   char  symbol[SIZE + 1];
+   struct tree_node *left_child, *right_child;
+};
+
+int  count (struct tree_node *rp, int maxlen) {
+
+  if (rp == NULL)  /* The tree is empty; so. */
+     return 0;
+
+  if ((rp->left_child == NULL) && (rp->right_child == NULL)) {
+
+     /* The current node is a leaf. Check the length of the symbol
+         and return 0 or 1 depending on the length.
+     */
+
+     if (strlen(rp->symbol) <= maxlen)
+         return 1;
+     else
+         return 0;
+  }
+  else {
+
+     /* The current node is not a leaf. Use recursion to get
+        the correct counts for the left and right subtrees and
+        return the sum of the counts.
+    */
+        return  count(rp->left_child, maxlen) +
+                count(rp->right_child, maxlen);
+  }
+
+} // End of count.
+
+
+Question IV:
+------------
+
+Note: Students were not required to do the error checks carried
+      out in the following solution. 
+
+#include  <stdio.h>
+#include  <stdlib.h>
+#include  <string.h>
+
+#define   NAME_MAX   30
+#define   TITLE_MAX  20
+
+struct   employee {
+  char  name[NAME_MAX];        int  id_number;
+  char  job_title[TITLE_MAX];  int  age;  float salary;
+};
+
+
+void  create_manager_file (char *infile, char *outfile) {
+
+  FILE *infp, *outfp;  /* Pointer for input and output files. */
+
+  struct employee  temp;  /* To read from input file. */
+
+  /* Open the input and output files. */
+
+  if ((infp = fopen(infile, "r")) == NULL) {
+     fprintf(stderr, "Could not open input file.\n");
+     exit(1);
+  }
+
+  if ((outfp = fopen(outfile, "w")) == NULL) {
+     fprintf(stderr, "Could not open output file.\n");
+     exit(1);
+  }
+
+  /* Read each record, check if the record corresponds to a manager;
+     if so, write the appropriate fields to the output file.
+  */ 
+
+  while (fread((void *)&temp, sizeof(struct employee), 1, infp) == 1) {
+    if (strcmp(temp.job_title, "Manager") == 0)
+       fprintf(outfp, "%s %d %f\n", temp.name, temp.id_number, temp.salary);
+  }
+
+  /* Close the input and output files. */
+
+  if (fclose(infp) == EOF) {
+     fprintf(stderr, "Could not close input file.\n");
+     exit(1);
+  }
+
+  if (fclose(outfp) == EOF) {
+     fprintf(stderr, "Could not close output file.\n");
+     exit(1);
+  }
+
+} /* End of create_manager_file. */
+
+===============================================================================
